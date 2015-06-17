@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Red Hat Jboss Data Grid Demo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Disable phone number detection on iOS.  -->
+<meta name="format-detection" content="telephone=no" />
+
+<!-- Set the tab, home page, shortcut icons -->
+<!-- <link rel="Shortcut Icon" href="img/"> -->
+<!-- <link rel="apple-touch-icon" href="img/"/> -->
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>-->
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/screen.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/screen.min.css"/>-->
+
+<link rel="stylesheet" href="css/chat.css" />
+
+<!-- Set viewport scaling and zoom features -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery-2.0.3.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery-2.0.3.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.min.js"></script>-->
+
+<link
+	href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+	rel="stylesheet">
+
+<link rel="stylesheet" href="css/msgPop.css">
+
+<script src="js/libs/jquery.msgPop.js"></script>
+
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/lodash-2.4.1.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/lodash-2.4.1.min.js"></script>-->
+
+<script type="text/javascript" src="js/libs/strophe.min.js"></script>
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/app.js"></script>
+<!-- For minification, uncomment out this file -->
+<!-- <script type="text/javascript" src="js/app.min.js"></script> -->
+
+
+<script type="text/javascript">
+        $( document ).ready( function() {
+            //setup the app after all scripts have loaded
+
+            $(function() {
+                // Enhance the footer since it is present outside the page definition and hence not enhanced automatically.
+                $( "[data-role='footer']" ).toolbar();
+                $( "[data-role='navbar']" ).navbar();
+            });
+            // Update the contents of the toolbars
+            $( document ).on( "pageshow", "[data-role='page']", function() {
+                var current = $( this ).jqmData( "title" );
+                // Remove active class from nav buttons
+                $( "[data-role='navbar'] a.ui-btn-active" ).removeClass( "ui-btn-active" );
+                // Add active class to current nav button
+                $( "[data-role='navbar'] a" ).each(function() {
+                    if ( $( this ).text() === current ) {
+                        $( this ).addClass( "ui-btn-active" );
+                    }
+                });
+            });
+
+        	MsgPop.displaySmall = true;
+            MsgPop.position = "down";
+                        
+            // On browsing to the Members jQuery Mobile page, update it to show all members
+            $("#member-art").on("pagebeforeshow", function() {
+                // Fetches the initial member data and populates the table using lodash templates
+                updateMemberTable();
+            });
+
+            //Register an event listener on the submit action
+            $('#reg').submit(function(event) {
+                event.preventDefault();
+
+                var memberData = $(this).serializeObject();
+
+                registerMember(memberData);
+            });
+
+            //Register the cancel listener
+            $('#cancel').click(function(event) {
+                //clear input fields
+                $('#reg')[0].reset();
+
+                //clear existing msgs
+                $('span.invalid').remove();
+                $('span.success').remove();
+            });
+
+            $("#refreshButton").click(function(event) {
+                updateMemberTable();
+            });
+
+            //Clear member registration and error messages on page change
+            $("#register-art").on("pagebeforeshow", function(event) {
+                $("#formMsgs").empty();
+                $('span.invalid').remove();
+            });
+
+            $('#bulkLoad').click(function(event) {
+                executeLoad();
+            });
+
+            $('#countMembers').click(function(event) {
+            	countMembers();
+            });
+
+            $('#useradd').click(function(event) {
+            	addMember();
+            });
+
+
+            $( "#searchMembersInput" ).keyup(function(e) {
+            		text = $('#searchMembersInput').val();
+            		findByName(text);
+            });            
+            
+        });
+
+        $.fn.serializeObject = function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    </script>
+</head>
+<body>
+	<div id="container">
+		<section>
+			<article id="intro-art" data-role="page" data-title="Home">
+				<!-- Header -->
+				<div data-role="header" class="header">
+					<h3>Red Hat JBoss Data Grid Demo</h3>
+					<a href="#info-aside"
+						class="ui-btn ui-btn-right ui-icon-info ui-btn-icon-notext ui-corner-all"
+						data-rel="popup" data-position-to="window">Info</a>
+
+				</div>
+				<!-- /Header -->
+
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<img src="img/Logo_RH_BW_RGB_Default.png" class="mobileicon"
+							style="height: 50px;" /> <img
+							src="img/Logotype_RHJB_DataGrid_RGB_Black.png" class="mobileicon"
+							align="right" style="height: 50px;" />
+						<p>Bienvenido a la demo de JBoss Data Grid.</p>
+						<table>
+							<tr>
+								<td><a href="#" id="bulkLoad" class="ui-btn ui-corner-all">Cargar
+										Datos Masivos</a></td>
+								<td><a href="#add-member-aside" id="addMember"
+									class="ui-btn ui-corner-all" data-rel="popup"
+									data-position-to="window">Agregar Usuario</a></td>
+								<td><a href="#" id="countMembers"
+									class="ui-btn ui-corner-all">Contar Usuarios</a></td>
+
+							</tr>
+
+						</table>
+						<form>
+							<input data-type="search" id="searchMembersInput" />
+						</form>
+						<table data-role="table" id="member-table" data-mode="reflow"
+							class="app-responsive table-stroke">
+							<thead>
+								<tr>
+									<th data-priority="1">Id</th>
+									<th data-priority="persist">Nombre</th>
+									<th data-priority="persist">Paterno</th>
+									<th data-priority="persist">Materno</th>
+									<th data-priority="persist">Edad</th>
+									<th data-priority="persist"></th>
+								</tr>
+							</thead>
+							<tbody id="members">
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- New HTML5 aside tag -->
+				<aside id="info-aside" data-role="popup">
+					<!-- Header -->
+					<div data-role="header">
+						<h3>Conozca m&aacute;s</h3>
+						<a href="#" data-rel="back"
+							class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all">Close</a>
+					</div>
+					<!-- /Header -->
+
+					<div class="ui-content" role="main">
+						<p>Conozca m&aacute;s de Red Hat JBoss Data Grid 6</p>
+						<ul>
+							<li><a
+								href="https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Data_Grid/"
+								target="_blank">Documentaci&oacute;n</a></li>
+							<li><a
+								href="http://www.redhat.com/en/technologies/jboss-middleware/data-grid"
+								target="_blank">Informaci&oacute;n del producto</a></li>
+						</ul>
+					</div>
+				</aside>
+
+				<!-- New HTML5 aside tag -->
+				<aside id="add-member-aside" data-role="popup">
+					<!-- Header -->
+					<div data-role="header">
+						<h3>Nuevo Usuario</h3>
+						<a href="#" data-rel="back"
+							class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all">Cerrar</a>
+					</div>
+					<!-- /Header -->
+
+					<div class="ui-content" role="main">
+						<p>Ingrese los datos del nuevo usuario:</p>
+						<form id="new-user-form">
+							<label>ID:</label><input data-type="ID" id="userid" /> <label>Nombre:</label><input
+								data-type="ID" id="username" /> <label>Paterno:</label><input
+								data-type="ID" id="usermiddlename" /> <label>Materno:</label><input
+								data-type="ID" id="userlastname" /> <label>Edad:</label><input
+								data-type="ID" id="userage" /> <a href="#" id="useradd"
+								class="ui-btn ui-corner-all" data-rel="back">Agregar</a>
+						</form>
+					</div>
+				</aside>
+			</article>
+
+		</section>
+	</div>
+	<script type="text/template" id="member-tmpl">
+        <% _.each(members, function(member) { %>
+        <tr>
+            <th><%=member.id%></td>
+            <td><%=member.name%></td>
+            <td><%=member.middleName%></td>
+            <td><%=member.lastName%></td>
+            <td><%=member.age%></td>
+			<td style='text-align:center;vertical-align:top'><a href="#" id="deletebtn" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all" onclick="deleteMember(<%=member.id%>);"><%=member.id%></a></td>
+        </tr>
+        <% }); %>
+    </script>
+</body>
+</html>

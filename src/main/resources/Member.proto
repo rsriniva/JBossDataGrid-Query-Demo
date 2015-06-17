@@ -1,0 +1,16 @@
+package com.redhat.demos.datagrid_demo_app.model;
+
+/* @Indexed */
+message Member {
+   /* @IndexedField */
+   required string name = 1;
+   /* @IndexedField */
+   required int32 id = 2;
+   optional string middleName = 3;
+   optional string lastName = 4;
+   optional int32 age = 5;
+   optional string location = 6;
+   optional string supervisor = 7;
+   optional string status = 8;
+
+}
