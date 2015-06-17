@@ -37,7 +37,7 @@ Configure the JBoss DataGrid
 1. Open file JDG_HOME/standalone/configuration/standalone.xml.
 2. Add the following lines below <cache-container name="local" default-cache="default" statistics="true"> tag:
 
-´´´´
+```
     <local-cache name="members" start="EAGER">
         <indexing index="LOCAL">
             <property name="default.directory_provider">ram</property>
@@ -46,7 +46,7 @@ Configure the JBoss DataGrid
         <locking isolation="NONE" acquire-timeout="30000" concurrency-level="1000" striping="false"/>
         <transaction mode="NONE"/>
     </local-cache>
-´´´´
+```
 
 3. Save changes.
 
