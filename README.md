@@ -1,4 +1,4 @@
-datagrid-demo-app: Assortment of technologies including Arquillian
+datagrid-demo-app: JBoss Enterprise Application Platform and JBoss Data Grid Demo
 ========================
 Author: Isaac Galvan  
 Level: Intermediate  
@@ -78,7 +78,7 @@ _NOTE: The following build command assumes you have configured your Maven user s
 Access the application 
 ---------------------
 
-The application will be running at the following URL: <http://localhost:8180/datagrid-demo-app/>.
+The application will be running at the following URL: <http://localhost:8080/datagrid-demo-app/>.
 
 Using the application 
 ---------------------
