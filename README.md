@@ -5,7 +5,6 @@ Level: Intermediate
 Technologies: CDI, JSF, JPA, EJB, JAX-RS, BV  
 Summary: The `datagrid-demo-app` shows how JBoss DataGrid can store, remove, retrive and query data using the server memory instead of a database. It shows how DataGrid can increase speed and performance of any application.  
 Target Product: JBoss DataGrid and JBoss Enterprise Application Platform.
-Source: <https://github.com/jboss-developer/jboss-eap-quickstarts/>  
 
 What is it?
 -----------
