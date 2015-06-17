@@ -35,7 +35,7 @@ Configure the JBoss DataGrid
 -------------------------
 
 1. Open file JDG_HOME/standalone/configuration/standalone.xml.
-2. Add the following lines below <cache-container name="local" default-cache="default" statistics="true"> tag:
+2. Add the following lines below ```<cache-container name="local" default-cache="default" statistics="true">``` tag:
 
 ```
     <local-cache name="members" start="EAGER">
