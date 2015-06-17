@@ -57,8 +57,8 @@ Start the JBoss DataGrid
 1. Open a command prompt and navigate to the root of the JBoss DataGrid directory.
 2. The following shows the command line to start the server:
 
-For Linux:   JDG_HOME/bin/standalone.sh -Djboss.socket.binding.port-offset=100
-For Windows: JDG_HOME\bin\standalone.bat -Djboss.socket.binding.port-offset=100
+        For Linux:   JDG_HOME/bin/standalone.sh -Djboss.socket.binding.port-offset=100
+        For Windows: JDG_HOME\bin\standalone.bat -Djboss.socket.binding.port-offset=100
 
  
 Build and Deploy the Quickstart
