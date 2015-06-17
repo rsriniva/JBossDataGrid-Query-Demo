@@ -1,4 +1,4 @@
-datagrid-demo-app: JBoss Enterprise Application Platform and JBoss Data Grid Demo
+JBoss Enterprise Application Platform and JBoss Data Grid Demo
 ========================
 Author: Isaac Galvan  
 Level: Intermediate  
